@@ -1,13 +1,13 @@
 --register
   INSERT INTO users (email, password)
-  VALUES ('Tes123@gmail.com', '123qweA23')
+  VALUES ('cobacoba@gmail.com', '123456')
   RETURNING user_id;
 
   INSERT INTO profiles (user_id)
-  VALUES ('d8040472-fde0-4cae-aef6-42013e42ee1a');
+  VALUES (3);
 
   INSERT INTO ewallet (user_id, balance)
-  VALUES ('d8040472-fde0-4cae-aef6-42013e42ee1a', 0.00);
+  VALUES (3, 0.00);
 
 --login
 SELECT
@@ -21,4 +21,11 @@ SELECT
   e.balance
 FROM users u
 JOIN profiles p ON p.user_id = u.user_id
-JOIN ewallet e  ON e.user_id = u.user_id;
+JOIN ewallet e  ON e.user_id = u.user_id
+WHERE u.email = 'akmal@gmail.com';
+
+
+table ewallet
+DROP TABLE payment_methods;
+DELETE TABLE users
+WHERE email = 'akmal@gmail.com';

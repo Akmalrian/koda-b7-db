@@ -1,26 +1,26 @@
 
 CREATE TABLE transaction_categories (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id            SERIAL PRIMARY KEY,
   category_name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE payment_methods (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id          SERIAL PRIMARY KEY,
   method_name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
-  user_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id    SERIAL PRIMARY KEY,
   email      VARCHAR(255) NOT NULL UNIQUE,
   password   VARCHAR(255) NOT NULL,
   pin        VARCHAR(6),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  updated_at TIMESTAMP
 );
 
 CREATE TABLE profiles (
-  id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id   UUID NOT NULL UNIQUE,
+  id        SERIAL PRIMARY KEY,
+  user_id   INT NOT NULL UNIQUE,
   full_name VARCHAR(255),
   phone     VARCHAR(20),
   photo     TEXT,
@@ -29,19 +29,19 @@ CREATE TABLE profiles (
 );
 
 CREATE TABLE ewallet (
-  id      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL UNIQUE,
+  id      SERIAL PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
   balance DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
 
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE transactions (
-  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  sender_id        UUID,
-  receiver_id      UUID,
-  category_id      UUID NOT NULL,
-  method_id        UUID,
+  id               SERIAL PRIMARY KEY,
+  sender_id        INT,
+  receiver_id      INT,
+  category_id      INT NOT NULL,
+  method_id        INT,
   type             VARCHAR(20) NOT NULL,
   amount           DECIMAL(15, 2) NOT NULL CHECK (amount > 0),
   tax              DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
