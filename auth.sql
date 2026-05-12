@@ -1,31 +1,31 @@
---register
+
+table profiles
+DROP TABLE users
+DELETE FROM transaction_categories
+WHERE id = ALL;
+
+-- REGISTER
+-- Saat register otomatis buat users dan wallet
+
   INSERT INTO users (email, password)
-  VALUES ('cobacoba@gmail.com', '123456')
-  RETURNING user_id;
+  VALUES ('akmal@gmail.com', '123456');
 
-  INSERT INTO profiles (user_id)
-  VALUES (3);
+  INSERT INTO wallet (user_id, balance)
+  VALUES (LAST_INSERT_ID(), 0);
 
-  INSERT INTO ewallet (user_id, balance)
-  VALUES (3, 0.00);
 
---login
+-- LOGIN
 SELECT
-  u.user_id,
+  u.id,
   u.email,
-  u.password,   
+  u.password,
   u.pin,
-  p.full_name,
-  p.phone,
-  p.photo,
-  e.balance
+  u.fullname,
+  u.photo_path,
+  u.phone_number,
+  w.balance
 FROM users u
-JOIN profiles p ON p.user_id = u.user_id
-JOIN ewallet e  ON e.user_id = u.user_id
+JOIN wallet w ON w.user_id = u.id
 WHERE u.email = 'akmal@gmail.com';
 
-
-table ewallet
-DROP TABLE payment_methods;
-DELETE TABLE users
-WHERE email = 'akmal@gmail.com';
+table transactions

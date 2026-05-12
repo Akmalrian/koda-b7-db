@@ -1,61 +1,69 @@
-## ERD (Entity Relationship Diagram)
-
 ```mermaid
 erDiagram
-    USERS {
-        int user_id PK
-        string email
-        string password
-        string pin
-        timestamp created_at
-        timestamp updated_at
-    }
 
-    PROFILES {
-        int id PK
-        int user_id FK
-        string full_name
-        string phone
-        string photo
-    }
+  USERS {
+    int id PK
+    string email
+    string password
+    string pin
+    string fullname
+    string photo_path
+    string phone_number
+    timestamp created_at
+    timestamp updated_at
+  }
 
-    EWALLET {
-        int id PK
-        int user_id FK
-        decimal balance
-    }
+  WALLET {
+    int id PK
+    int user_id FK
+    decimal balance
+    timestamp updated_at
+  }
 
-    TRANSACTIONS {
-        int id PK
-        int sender_id FK
-        int receiver_id FK
-        int category_id FK
-        int method_id FK
-        string type
-        decimal amount
-        decimal tax
-        decimal total_amount
-        string notes
-        string status
-        timestamp transaction_date
-    }
+  TRANSACTIONS {
+    int id PK
+    int user_id FK
+    string type
+    decimal amount
+    string status
+    timestamp created_at
+    timestamp updated_at
+  }
 
-    TRANSACTION_CATEGORIES {
-        int id PK
-        string category_name
-    }
+  TOPUP_DETAILS {
+    int id PK
+    int transaction_id FK
+    int wallet_id FK
+    int payment_method_id FK
+    decimal order_amount
+    decimal tax_amount
+    decimal delivery_fee
+    decimal total_amount
+    timestamp created_at
+  }
 
-    PAYMENT_METHODS {
-        int id PK
-        string method_name
-    }
+  TRANSFER_DETAILS {
+    int id PK
+    int transaction_id FK
+    int sender_wallet_id FK
+    int receiver_wallet_id FK
+    decimal amount
+    string notes
+    timestamp created_at
+  }
 
-    USERS ||--|| PROFILES : "memiliki"
-    USERS ||--|| EWALLET : "memiliki"
-    USERS ||--o{ TRANSACTIONS : "mengirim (sender)"
-    USERS ||--o{ TRANSACTIONS : "menerima (receiver)"
-    TRANSACTIONS }o--|| TRANSACTION_CATEGORIES : "memiliki kategori"
-    TRANSACTIONS }o--|| PAYMENT_METHODS : "memiliki metode"
+  PAYMENT_METHODS {
+    int id PK
+    string payment_name
+  }
 
+  USERS ||--|| WALLET : "memiliki"
+  USERS ||--o{ TRANSACTIONS : "melakukan"
+  TRANSACTIONS ||--o| TOPUP_DETAILS : "detail topup"
+  TRANSACTIONS ||--o| TRANSFER_DETAILS : "detail transfer"
+  TOPUP_DETAILS }o--|| PAYMENT_METHODS : "menggunakan"
+  WALLET ||--o{ TOPUP_DETAILS : "wallet tujuan"
+  WALLET ||--o{ TRANSFER_DETAILS : "wallet pengirim"
+  WALLET ||--o{ TRANSFER_DETAILS : "wallet penerima"
 
 ```
